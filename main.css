@@ -1,0 +1,39 @@
+#profile {
+    height:inherit;
+    width:20% ;
+    display: inline-block;
+     position: absolute; 
+    right: 0px;
+}
+
+#greenbar {
+    padding:20px;
+    background-color:#227066; 
+    height: 20%; width: 75% ;
+    float:left;
+    display:inline-block;
+}
+
+#instructions {
+    padding:20px;
+    float:left; 
+    display:inline-block;
+    width:70%;
+}
+
+#bluebar {
+    padding:25px;
+    background-color:#2D70B6; 
+    height: 20%; 
+    width: 100%;
+    display: block;
+}
+
+.options {
+    position: absolute;
+    left: 100p;
+    font-family: cursive;
+    font-size: 20px;
+    display: inline-block;
+    margin: 10px;
+}
