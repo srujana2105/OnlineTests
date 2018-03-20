@@ -19,30 +19,63 @@
 </head>
 <body>
 
-<ul class="sidenav">
+<ul class="sidenav" id="sidenav">
   	
     <?php  if (isset($_SESSION['username'])) : ?>
     	 <br><p style="margin:10%"><strong><?php echo $_SESSION['username']; ?><br>Faculty ID:</strong><?php echo $_SESSION['fid']; ?>
     <?php endif ?></p><br>
-    <li><a class="active" href="#home">Home</a></li>
-  <li><a href="#viewquestions">View questions</a></li>
-  <li><a href="#results">View Responses and Results</a></li>
+    <li ><a id="Home" class="active" onclick="Home()">Home</a></li>
+    <li><a id="VQ" onclick="ViewQuestions()">View questions</a></li>
+  <li><a id="Results" onclick="Results()">View Responses and Results</a></li>
     <li><a href="FacultyLogin.php" target="_parent">Logout</a></li>
     </ul>
-    <div id="home">
-    
-        <div class="content">Contests</div>
+    <div id="content">
     
     </div>
-    <div id="viewquestions">
-    
-    <div class="content">viewquestions</div>
-    
-    </div>
-    <div id="results">
-    
-        <div class="content">Results</div>
-    
-    </div>
+    <script>
+        function ViewQuestions()  {
+        
+            document.getElementsByClassName("active").className="inactive";
+            var e=document.getElementById("VQ");
+            e.className="active";
+            
+            var ajx = new XMLHttpRequest();
+            ajx.onreadystatechange = function () {
+                if (ajx.readyState == 4 && ajx.status == 200) {
+                    document.getElementById("content").innerHTML = ajx.responseText;
+                }
+            };
+            ajx.open("POST","ViewQuestions.php",true);
+        ajx.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            ajx.send();
+        
+          }
+    function Results()  {
+        
+            var ajx = new XMLHttpRequest();
+            ajx.onreadystatechange = function () {
+                if (ajx.readyState == 4 && ajx.status == 200) {
+                    document.getElementById("content").innerHTML = ajx.responseText;
+                }
+            };
+            ajx.open("POST","Results.php",true);
+        ajx.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            ajx.send();
+        
+          }
+        function Home()  {
+        
+            var ajx = new XMLHttpRequest();
+            ajx.onreadystatechange = function () {
+                if (ajx.readyState == 4 && ajx.status == 200) {
+                    document.getElementById("content").innerHTML = ajx.responseText;
+                }
+            };
+            ajx.open("POST","Home.php",true);
+        ajx.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            ajx.send();
+        
+          }
+    </script>
 </body>
 </html>
