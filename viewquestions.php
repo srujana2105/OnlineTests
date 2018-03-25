@@ -3,11 +3,11 @@
     </head>
     <body>
 <?php 
+
 include 'connection.php';
 $sql="SELECT * FROM testdb.questions";
 $result=mysqli_query($con,$sql);
 $res=mysqli_fetch_all($result,MYSQLI_ASSOC);
-        echo " hello";
 echo "<table border=2>
         <tr>
             <th>Question ID</th>
@@ -30,9 +30,8 @@ echo "<table border=2>
             <td>".$res[$i]["OpC"]."</td>
             <td>".$res[$i]["OpD"]."</td>
             <td>".$res[$i]["Answer"]."</td>
-            <td><button onclick=edit(".$res[$i]['QID'].")data-toggle='collapse' href='#collapseExample'>Edit</button></td>
+            <td><button onclick=edit(".$res[$i]['QID'].")>Edit</button></td>
           </tr>
-          <tr><div class='collapse' id='edit'>djvskdfjhsjvbm </div></tr>
             ";
          }
         echo "</table>";
