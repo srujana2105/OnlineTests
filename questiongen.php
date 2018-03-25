@@ -10,6 +10,8 @@
     <div id="profile">
     <?php 
   session_start(); 
+        $answers=array();
+        $_SESSION['answers'];
 
   if (!isset($_SESSION['username'])) {
   	$_SESSION['msg'] = "You must log in first";
@@ -40,10 +42,11 @@
     <div id="instructions">hi </div>
             
     <div><div id="prev" style="position: fixed; bottom: 50px;" ><button name="previous" style="float: left;">Previous</button>
-        </div><div id="next" style="position: fixed; bottom: 50px; right: 400px;"><button name="next" style="float: right;">Next</button>
+        </div><div id="next" style="position: fixed; bottom: 50px; right: 400px;"><button name="next" style="float: right;">Next</button></div>
+        <div id="submit" style="position: fixed; bottom: 50px; right: 500px;"><button name="submit" style="float: center; ">submit</button>
         </div>	
        
-        </div>
+        
     
     <script type= "text/javascript" >  
         var pool;
@@ -75,9 +78,11 @@
             document.getElementById('instructions').innerHTML="<h1>HI</h1>";
         display(0);
         document.getElementById("next").onclick = function(){
+           
             if( x==n-1 )
             {
-                document.getElementsByName("previous").disabled = true;
+                document.getElementsByName("next").disabled = true;
+//                document.getElementsByName("submit").style.display=block;                
             }
         else {display(x+1); x=x+1;}
         }
@@ -90,7 +95,7 @@
         }                                                    
         }
           function display(x)  {
-        var sql = "SELECT * FROM testdb.questions WHERE QID="+(pool[x]+1);
+        var sql = "SELECT * FROM database1.questions WHERE QID="+(pool[x]+1);
         
             var ajx = new XMLHttpRequest();
             ajx.onreadystatechange = function () {
