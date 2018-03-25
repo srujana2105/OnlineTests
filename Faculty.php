@@ -15,6 +15,8 @@
 <head>
 	<title>Home</title>
 	<link rel="stylesheet" type="text/css" href="Faculty.css">
+    <link rel="stylesheet" type="text/css" href="ViewQuestions.css">
+    <script type="text/javascript" src="jquery-3.3.1.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
@@ -25,32 +27,64 @@
     	 <br><p style="margin:10%"><strong><?php echo $_SESSION['username']; ?><br>Faculty ID:</strong><?php echo $_SESSION['fid']; ?>
     <?php endif ?></p><br>
     <li ><a id="Home" class="active" onclick="Home()">Home</a></li>
-    <li><a id="VQ" onclick="ViewQuestions()">View questions</a></li>
-  <li><a id="Results" onclick="Results()">View Responses and Results</a></li>
+    <li><a id="VQ" class="inactive" onclick="ViewQuestions()">View questions</a></li>
+  <li><a id="Results"  class="inactive" onclick="Results()">View Responses and Results</a></li>
     <li><a href="FacultyLogin.php" target="_parent">Logout</a></li>
     </ul>
     <div id="content">
     
     </div>
     <script>
+        var arrobj;
+        function makeTableHTML(myArray) {
+    var result = "<table border=1 id='table_detail' align=center cellpadding=10><tr><th>Question ID</th><th>Question</th><th>Option A</th><th>Option B</th><th>Option C</th><th>Option D</th><th>Answer</th><tr>";
+    for(var i=0; i<myArray.length; i++) {
+        result += "<tr>";
+        for(var j=0; j<myArray[i].length; j++){
+            result += "<td>"+myArray[i][j]+"</td>";
+        }
+        result += "<td><button onclick='show_hide_row("+i+");'>edit</button></td></tr><tr id='hidden_row"+i+"'  class='hidden_row'></tr>";
+    }
+    result += "</table>";
+
+    return result;
+}
+        function confirmedit()
+        {
+            var r=confirm("Do you want to edit the selected question?");
+        }
+        function show_hide_row(i)
+        {    
+            row='hidden_row'+i;
+            console.log(arrobj);
+            document.getElementById(row).innerHTML="<td colspan=8><div><form id='editques"+arrobj[i][0]+"' method='POST' onsubmit='confirmedit();' action='EditQuestion.php'>      <input type='hidden' name='qid' form='editques"+arrobj[i][0]+"' value='"+arrobj[i][0]+"'><label>Question:</label>    <textarea form='editques"+arrobj[i][0]+"' name='question' rows='3' cols='70'>"+arrobj[i][1]+"</textarea>    <br><br>    <label>OpA</label><textarea  form='editques"+arrobj[i][0]+"' name='opa' rows='2' cols='70'>"+arrobj[i][2]+"</textarea><br><br>    <label>OpB</label><textarea  form='editques"+arrobj[i][0]+"' name='opb' rows='2' cols='70'>"+arrobj[i][3]+"</textarea><br><br>    <label>OpC</label> <textarea  form='editques"+arrobj[i][0]+"' name='opc' rows='2' cols='70'>"+arrobj[i][4]+"</textarea><br><br><label>OpD</label><textarea  form='editques"+arrobj[i][0]+"' name='opd' rows='2' cols='70'>"+arrobj[i][5]+"</textarea><br><br><label>Answer</label><textarea  form='editques"+arrobj[i][0]+"' name='answer' rows='2' cols='70'>"+arrobj[i][6]+"</textarea><br><br><button form='editques"+arrobj[i][0]+"' type='submit' name='edit'>Edit</button></form></div><td>";
+            //alert(document.getElementById(row).innerHTML);
+            $("#"+row).toggle();            
+        }
         function ViewQuestions()  {
         
-            document.getElementsByClassName("active").className="inactive";
+            document.getElementsByClassName("active")[0].className="inactive";
             var e=document.getElementById("VQ");
             e.className="active";
             
             var ajx = new XMLHttpRequest();
             ajx.onreadystatechange = function () {
                 if (ajx.readyState == 4 && ajx.status == 200) {
-                    document.getElementById("content").innerHTML = ajx.responseText;
+                    arrobj=JSON.parse(ajx.responseText);
+                    console.log(arrobj);
+                    document.getElementById("content").innerHTML = makeTableHTML(arrobj);
                 }
             };
-            ajx.open("POST","ViewQuestions.php",true);
+            ajx.open("GET","ViewQuestions.php",true);
         ajx.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             ajx.send();
-        
-          }
+            
+        }
     function Results()  {
+        
+        document.getElementsByClassName("active")[0].className="inactive";
+            var e=document.getElementById("Results");
+            e.className="active";
         
             var ajx = new XMLHttpRequest();
             ajx.onreadystatechange = function () {
@@ -64,7 +98,10 @@
         
           }
         function Home()  {
-        
+        document.getElementsByClassName("active")[0].className="inactive";
+            var e=document.getElementById("Home");
+            e.className="active";
+            
             var ajx = new XMLHttpRequest();
             ajx.onreadystatechange = function () {
                 if (ajx.readyState == 4 && ajx.status == 200) {
