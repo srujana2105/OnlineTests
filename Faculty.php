@@ -26,28 +26,20 @@
     <?php  if (isset($_SESSION['username'])) : ?>
     	 <br><p style="margin:10%"><strong><?php echo $_SESSION['username']; ?><br>Faculty ID:</strong><?php echo $_SESSION['fid']; ?>
     <?php endif ?></p><br>
-<<<<<<< HEAD
-    <li><a class="active"  id= "home" href="#home">Home</a></li>
-  <li><a href="#viewquestions" id="VQ">View questions</a></li>
-  <li><a href="#results" id="Results">View Responses and Results</a></li>
-    <li><a href="FacultyLogin.php" target="_parent" >Logout</a></li>
-=======
+
+  
     <li ><a id="Home" class="active" onclick="Home()">Home</a></li>
     <li><a id="VQ" class="inactive" onclick="ViewQuestions()">View questions</a></li>
   <li><a id="Results"  class="inactive" onclick="Results()">View Responses and Results</a></li>
     <li><a href="FacultyLogin.php" target="_parent">Logout</a></li>
->>>>>>> 44fdaad2e62bf4e5fc24af719f2e694294c92e98
+
     </ul>
     <div id="content">
     
           
     </div>
     <script>
-<<<<<<< HEAD
-        function ViewQuestions()  {
-        
-            document.getElementsByClassName("active").className="inactive";
-=======
+
         var arrobj;
         function makeTableHTML(myArray) {
     var result = "<table border=1 id='table_detail' align=center cellpadding=10><tr><th>Question ID</th><th>Question</th><th>Option A</th><th>Option B</th><th>Option C</th><th>Option D</th><th>Answer</th><tr>";
@@ -77,26 +69,13 @@
         function ViewQuestions()  {
         
             document.getElementsByClassName("active")[0].className="inactive";
->>>>>>> 44fdaad2e62bf4e5fc24af719f2e694294c92e98
+
             var e=document.getElementById("VQ");
             e.className="active";
             
             var ajx = new XMLHttpRequest();
             ajx.onreadystatechange = function () {
-                if (ajx.readyState == 4 && ajx.status == 200) {
-<<<<<<< HEAD
-                    document.getElementById("content").innerHTML = ajx.responseText;
-                }
-            };
-            ajx.open("POST","viewquestions.php",true);
-        ajx.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            ajx.send();
-        
-          }
-    function Results()  {
-        
-=======
-                    arrobj=JSON.parse(ajx.responseText);
+                if (ajx.readyState == 4 && ajx.status == 200) {                    arrobj=JSON.parse(ajx.responseText);
                     console.log(arrobj);
                     document.getElementById("content").innerHTML = makeTableHTML(arrobj);
                 }
@@ -112,7 +91,6 @@
             var e=document.getElementById("Results");
             e.className="active";
         
->>>>>>> 44fdaad2e62bf4e5fc24af719f2e694294c92e98
             var ajx = new XMLHttpRequest();
             ajx.onreadystatechange = function () {
                 if (ajx.readyState == 4 && ajx.status == 200) {
@@ -125,14 +103,11 @@
         
           }
         function Home()  {
-<<<<<<< HEAD
-        
-=======
+
         document.getElementsByClassName("active")[0].className="inactive";
             var e=document.getElementById("Home");
             e.className="active";
-            
->>>>>>> 44fdaad2e62bf4e5fc24af719f2e694294c92e98
+
             var ajx = new XMLHttpRequest();
             ajx.onreadystatechange = function () {
                 if (ajx.readyState == 4 && ajx.status == 200) {
@@ -145,9 +120,6 @@
         
           }
     </script>
-<<<<<<< HEAD
 
-=======
->>>>>>> 44fdaad2e62bf4e5fc24af719f2e694294c92e98
 </body>
 </html>
