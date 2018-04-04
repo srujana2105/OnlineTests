@@ -17,7 +17,7 @@ ul.sidenav li a {
     padding: 8px 16px;
     font-size: 20px;
       margin:0 10% 0 10%;
-    text-decoration: none;
+   text-decoration: none;
 }
  
 ul.sidenav li a.active {
@@ -29,13 +29,14 @@ ul.sidenav li a:hover:not(.active) {
     background-color: #555;
     color: white;
 }
-
-div.content {
-    margin-left: 25%;
-    height:inherit;
+#content 
+{
+    padding-top: 4%;
+    width:75%;
+    float:right;
+    display: block;
 }
-
-@media screen and (max-width: 900px) {
+/*@media screen and (max-width: 900px) {
     ul.sidenav {
         width: 100%;
         height: auto;
@@ -46,11 +47,31 @@ div.content {
         padding: 15px;
     }
     div.content {margin-left: 0;}
-}
+}*/
 
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 700px) {
     ul.sidenav li a {
         text-align: center;
         float: none;
     }
+    ul.sidenav {
+        width: 100%;
+        height:auto;
+    }
+    #content
+    {
+        padding-top: 450px;
+        float: none;
+        width:100%;
+    }
+}
+@media screen and (max-width: 500px)
+{
+    
+    #content
+    {
+        padding-top: 400px;
+        border-top: 30%;
+    }
+    
 }
