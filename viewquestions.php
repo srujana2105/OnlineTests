@@ -1,47 +1,21 @@
-<html>
-    <head>
-    </head>
-    <body>
+
 <?php 
 
 include 'connection.php';
-$sql="SELECT * FROM testdb.questions";
-$result=mysqli_query($con,$sql);
-$res=mysqli_fetch_all($result,MYSQLI_ASSOC);
-echo "<table border=2>
-        <tr>
-            <th>Question ID</th>
-            <th>Question</th>
-            <th>A</th>
-            <th>B</th>
-            <th>C</th>
-            <th>D</th>
-            <th>Answer</th>
-        </tr>   
-        
-";
-        $r=sizeof($res);
-        for( $i = 0; $i<$r; $i++ ) {
-            echo "<tr>
-            <td>".$res[$i]["QID"]."</td>
-            <td>".$res[$i]["Question"]."</td>
-            <td>".$res[$i]["OpA"]."</td>
-            <td>".$res[$i]["OpB"]."</td>
-            <td>".$res[$i]["OpC"]."</td>
-            <td>".$res[$i]["OpD"]."</td>
-            <td>".$res[$i]["Answer"]."</td>
-            <td><button onclick=edit(".$res[$i]['QID'].")>Edit</button></td>
-          </tr>
-            ";
-         }
-        echo "</table>";
+//$sql="SELECT * FROM testdb.questions";
+//$result=mysqli_query($con,$sql);
+//$res=mysqli_fetch_all($result,MYSQLI_ASSOC);
+    if ($sql = $con->prepare("SELECT * FROM testdb.questions")) {
+        $sql->bind_result($qid,$question,$opa,$opb,$opc,$opd,$ans);
+        $OK = $sql->execute();
+    }
+    //put all of the resulting names into a PHP array
+    $result_array = Array();
+    while($sql->fetch()) {
+        $result_array[] = array($qid,$question,$opa,$opb,$opc,$opd,$ans);
+    }
+    //convert the PHP array into JSON format, so it works with javascript
+    $json_array = json_encode($result_array);
+        echo $json_array;
 ?>
-        <script>
-        
-        function edit(var q) {
-            
-        }
-        
-        </script>
-        </body>
-</html>
+     

@@ -48,7 +48,7 @@ if (isset($_POST['reg_user'])) {
   if (count($errors) == 0) {
   	$password = md5($password_1);//encrypt the password before saving in the database
 
-  	$query = "INSERT INTO database1.registration VALUES('$username', '$rollno', '$email', '$semester', '$password')";
+  	$query = "INSERT INTO testdb.registration VALUES('$username', '$rollno', '$email', '$semester', '$password')";
   	mysqli_query($db, $query);
   	$_SESSION['success'] = "You are now logged in";
       $_SESSION['username'] = $username;
@@ -67,7 +67,7 @@ if (isset($_POST['reg_user'])) {
         
         if(count($errors) == 0) {
             $password = md5($password);
-        $sql = "SELECT * FROM database1.registration WHERE RollNo='$username' AND Password='$password'";
+        $sql = "SELECT * FROM testdb.registration WHERE RollNo='$username' AND Password='$password'";
         
         $result = mysqli_query($db, $sql);
         $user = mysqli_fetch_assoc($result);

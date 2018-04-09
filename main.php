@@ -76,7 +76,7 @@ Sections in this question paper are displayed on the top bar of the screen. Ques
 After clicking the Save & Next button on the last question for a section, you will automatically be taken to the first question of the next section.
 You can shuffle between sections and questions anytime during the examination as per your convenience only during the time stipulated.
 Candidate can view the corresponding section summary as part of the legend that appears in every section above the question palette.<br><br><div align="right">
-   <form method="post" action="questiongen.php" target="question"> <button name="ok" type="submit">OK</button></form></div></div>
+   <form method="post" action="questiongen2.php" target="question"> <button name="ok" type="submit">OK</button></form></div></div>
     
 		
 </body>
