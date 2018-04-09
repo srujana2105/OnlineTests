@@ -1,4 +1,5 @@
-/* jQuery JavaScript Library v3.3.1
+/*!
+ * jQuery JavaScript Library v3.3.1
  * https://jquery.com/
  *
  * Includes Sizzle.js
@@ -10361,4 +10362,3 @@ if ( !noGlobal ) {
 
 return jQuery;
 } );
-
