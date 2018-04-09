@@ -90,7 +90,7 @@
         }                                                    
         }
           function display(x)  {
-        var sql = "SELECT * FROM testdb.questions WHERE QID="+(pool[x]+1);
+        var sql = "SELECT * FROM questions WHERE QID="+(pool[x]+1);
         
             var ajx = new XMLHttpRequest();
             ajx.onreadystatechange = function () {

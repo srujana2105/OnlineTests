@@ -8,16 +8,16 @@ $email    = "";
 $errors = array(); 
 
 // connect to the database
-$db = mysqli_connect('localhost', 'root', '');
+include "connection.php";
 
 // REGISTER USER
 if (isset($_POST['reg_user'])) {
   // receive all input values from the form
-  $username = mysqli_real_escape_string($db, $_POST['Name']);
-    $fid = mysqli_real_escape_string($db, $_POST['FID']);
-  $email = mysqli_real_escape_string($db, $_POST['EmailId']);
-  $password_1 = mysqli_real_escape_string($db, $_POST['Password']);
-  $password_2 = mysqli_real_escape_string($db, $_POST['psw-repeat']);
+  $username = mysqli_real_escape_string($con, $_POST['Name']);
+    $fid = mysqli_real_escape_string($con, $_POST['FID']);
+  $email = mysqli_real_escape_string($con, $_POST['EmailId']);
+  $password_1 = mysqli_real_escape_string($con, $_POST['Password']);
+  $password_2 = mysqli_real_escape_string($con, $_POST['psw-repeat']);
 
   // form validation: ensure that the form is correctly filled ...
   // by adding (array_push()) corresponding error unto $errors array
@@ -31,8 +31,8 @@ if (isset($_POST['reg_user'])) {
 //array_push($errors,$username.$fid.$email.$password);
   // first check the database to make sure 
   // a user does not already exist with the same username and/or email
-  $user_check_query = "SELECT * FROM testdb.faculty WHERE FID='$fid' LIMIT 1";
-  $result = mysqli_query($db, $user_check_query);
+  $user_check_query = "SELECT * FROM faculty WHERE FID='$fid' LIMIT 1";
+  $result = mysqli_query($con, $user_check_query);
   $user = mysqli_fetch_assoc($result);
   
   if ($user) { // if user exists
@@ -45,8 +45,8 @@ if (isset($_POST['reg_user'])) {
   if (count($errors) == 0) {
   	$password = md5($password_1);//encrypt the password before saving in the database
 
-  	$query = "INSERT INTO testdb.faculty VALUES('$username', '$fid', '$email', '$password')";
-  	mysqli_query($db, $query);
+  	$query = "INSERT INTO faculty VALUES('$username', '$fid', '$email', '$password')";
+  	mysqli_query($con, $query);
   	$_SESSION['success'] = "You are now logged in";
       $_SESSION['username'] = $username;
       $_SESSION['fid'] = $fid;
@@ -57,17 +57,17 @@ if (isset($_POST['reg_user'])) {
 
     if(isset($_POST['login_user']))
     {
-         $username = mysqli_real_escape_string($db,$_POST['RollNo']);
-        $password = mysqli_real_escape_string($db,$_POST['Password']);
+         $username = mysqli_real_escape_string($con,$_POST['RollNo']);
+        $password = mysqli_real_escape_string($con,$_POST['Password']);
         
         if (empty($username)) { array_push($errors, "Faculty ID is required"); }
           if (empty($password)) { array_push($errors, "Password is required"); }
         
         if(count($errors) == 0) {
             $password = md5($password);
-        $sql = "SELECT * FROM testdb.faculty WHERE FID='$username' AND Password='$password'";
+        $sql = "SELECT * FROM faculty WHERE FID='$username' AND Password='$password'";
         
-        $result = mysqli_query($db, $sql);
+        $result = mysqli_query($con, $sql);
         $user = mysqli_fetch_assoc($result);
         
         if (mysqli_num_rows($result) == 1) {  
