@@ -1,18 +1,32 @@
 <html>
-    <head>
-    </head>
-    <body>
-    <div id="instructions"></div>
-        <script type="text/javascript">
-    var ques="What is capital of India";
-    var OpA="Hyderabad";
-    var OpB="Bangalore";
-    var OpC="Kolkata";
-    var OpD="Mumbai";
-            document.getElementById("instructions").innerHTML= "<h1>HI</h1>";
-        document.getElementById("instructions").innerHTML= "<h1 >HI</h1><br>1."+ques+".<br>a."+OpA+".<br>b."+OpB+".<br>c."+OpC+".<br>d."+OpD+". ";
-            
+  <head>
+    <script type="text/javascript" src="jquery-3.3.1.js"></script>
+    <script>
+      $(function () {
+
+        $('form').on('submit', function (e) {
+
+          e.preventDefault();
+
+          $.ajax({
+            type: 'post',
+            url: 'AddQuestion.php',
+            data: $('form').serialize(),
+            success: function () {
+              alert('form was submitted');
+            }
+          });
+
+        });
+
+      });
     </script>
-        a.<span style="font-size: 50px">hello</span>
-</body>
+  </head>
+  <body>
+    <form>
+      <input name="time" value="00:00:00.00"><br>
+      <input name="date" value="0000-00-00"><br>
+      <input name="submit" type="submit" value="Submit">
+    </form>
+  </body>
 </html>
