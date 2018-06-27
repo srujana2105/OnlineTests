@@ -32,5 +32,4 @@ echo "table created";
    }
 	
 }
-
 ?>

@@ -1,3 +1,4 @@
+
 <?php 
         include 'connection.php'; 
         $sql="DELETE FROM questions WHERE QID=".$_POST['qid'];

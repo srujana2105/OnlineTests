@@ -1,4 +1,3 @@
-
 <?php 
 
 include 'connection.php';
@@ -18,4 +17,5 @@ include 'connection.php';
     $json_array = json_encode($result_array);
         echo $json_array;
 ?>
+
      

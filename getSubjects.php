@@ -1,3 +1,4 @@
+
 <?php
 include "connection.php";
     if ($sql = $con->prepare("SELECT * FROM subjects")) {

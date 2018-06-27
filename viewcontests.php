@@ -11,7 +11,4 @@ if($con->query($q)){
 }else{
 	echo 'error'.$con->error;
 }
-
-
-
 ?>

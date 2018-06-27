@@ -13,5 +13,4 @@ include 'connection.php';
 //$_SESSION['correct'][$ind]=$ans;
        //echo $_SESSION['answers'][$ind]; 
 //echo $_SESSION['correct'][$ind];
-   
 ?>	 

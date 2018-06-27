@@ -53,7 +53,7 @@ if (isset($_POST['reg_user'])) {
   	$_SESSION['success'] = "You are now logged in";
       $_SESSION['username'] = $username;
       $_SESSION['rollno'] = $rollno;
-  	header('location: main.php');
+  	header('location: main2.php');
   }
 }
 
@@ -76,7 +76,7 @@ if (isset($_POST['reg_user'])) {
             $_SESSION['success'] = "You are now logged in";
             $_SESSION['username'] = $user['Name'];
             $_SESSION['rollno'] = $user['RollNo'];
-            header("location: main.php");
+            header("location: main2.php");
         }else {
             array_push($errors, "LoginId/password combination incorrect"); 
         }

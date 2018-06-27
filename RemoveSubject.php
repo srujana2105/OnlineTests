@@ -1,3 +1,4 @@
+
 <?php 
         include 'connection.php'; 
         $sql="DELETE FROM subjects WHERE SID=".$_POST['sub'];

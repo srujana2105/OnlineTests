@@ -46,6 +46,4 @@ echo "<tr><td>$que[$i]</td><td>$res[$i]</td></tr>";
 echo " Score is:$c"
 //	$json_ar = json_encode($res);
 //     echo $json_ar;
-
-
 ?>

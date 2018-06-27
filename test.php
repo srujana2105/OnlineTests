@@ -1,3 +1,4 @@
+
 <?php
 session_start();
 $ans=array();
@@ -19,5 +20,4 @@ function func(x)
 		//<?php echo "hello"; ?>
         window.alert("hello"+x+"keerthana");
     }
-
 </script>

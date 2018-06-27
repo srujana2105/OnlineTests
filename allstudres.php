@@ -13,8 +13,4 @@ if($exec){
 		echo "</table>";
 	}
 }
-
-
-
-
 ?>
