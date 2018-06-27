@@ -18,7 +18,7 @@
               <p>Please fill in this form to register.</p>
               <hr>
                 <label name="Name" id="name"><b>Name</b></label>
-              <input name="Name" style="width: 95%" type="text" placeholder="Enter your full name" id="name"  required>
+              <input name="Name" style="width: 45%" type="text" placeholder="Enter your full name" id="name"  required>
                 <label id="rollno" name="Rollno"><b>Roll No.</b></label>
               <input type="text" class="box" name="RollNo" placeholder="Enter your Roll no." id="Rollno" onkeyup="validrollno()" required><p style="float:right; width: 45%; color:red;" id="Rmsg" class="msg"></p>
                 <label name="EmailId" id="EmailId"><b>Email ID</b></label>
