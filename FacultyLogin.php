@@ -11,7 +11,9 @@
     </head>
     <body>
 
-
+<script type="text/javascript">
+    window.history.forward(1);
+        </script>
         <link rel="stylesheet" type="text/css" href="index.css">
         <div id="id01" class="modal">
           <form id="modal-content" class="modal-content"  method="POST" action="FacultyLogin.php">

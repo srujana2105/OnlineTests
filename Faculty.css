@@ -1,4 +1,4 @@
-body {margin: 10;}
+body {margin: 0;}
 
 ul.sidenav {
     list-style-type: none;
@@ -9,11 +9,6 @@ ul.sidenav {
     position: fixed;
     height: 100%;
     overflow: auto;
-}
-#content.buttons{
-	width:100px;
-	color: red;
-	font-weight: 100;
 }
 
 ul.sidenav li a {
@@ -34,21 +29,6 @@ ul.sidenav li a:hover:not(.active) {
     background-color: #555;
     color: white;
 }
-
-div.content {
-	margin-top: 10%;
-    margin-left: 25%;
-    height:inherit;
-}
-#content {
-	margin-top: 10%;
-    margin-left: 25%;
-    height:inherit;
-}
-
-
-@media screen and (max-width: 900px) {
-
 #content 
 {
     padding-top: 4%;
@@ -57,7 +37,6 @@ div.content {
     display: block;
 }
 /*@media screen and (max-width: 900px) {
-
     ul.sidenav {
         width: 100%;
         height: auto;
@@ -94,5 +73,11 @@ div.content {
         padding-top: 400px;
         border-top: 30%;
     }
+    
+}
+
+#addQuestionForm.addq
+{
+    width: 200;
     
 }
