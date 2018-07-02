@@ -37,6 +37,7 @@ ul.sidenav li a:hover:not(.active) {
 
 #content 
 {
+    position: relative;
     padding-top: 4%;
     width:75%;
     float:right;
@@ -103,11 +104,5 @@ div.content {
         padding-top: 400px;
         border-top: 30%;
     }
-    
-}
-
-#addQuestionForm.addq
-{
-    width: 200;
     
 }

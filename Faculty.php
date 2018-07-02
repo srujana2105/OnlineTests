@@ -39,13 +39,17 @@ $page_limit=0;
     <li><a href="FacultyLogin.php" target="_parent">Logout</a></li>
 
     </ul>
-    <div id="content" align="center" style="margin-top:20px">
+    <div id="content">
     
           
     </div>
     <script>
 		onload=Home();
+        var added_ques=[];
+        var added_ques_id=[];
+        var VQstr;
         var arrobj=[];
+        var arrobj_adcon=[];
         var Arrobj;
         var subj;
         var str='';
@@ -54,6 +58,7 @@ $page_limit=0;
         var r=0;
         var sub;
         var rpp=2;
+        var name_contest="",dur_contest="",sem_contest="",sub_contest="";
 
         function makeTableHTML(myArray) {
     var result='';
@@ -200,19 +205,17 @@ $page_limit=0;
             $("#"+row).toggle();            
         }
         
-        
         function ViewQuestions()  {
+            $('#content').html(''); document.getElementsByClassName("active")[0].className="inactive";
+            var e=document.getElementById("VQ");
+            e.className="active";
             arrobj=[];
             VQstr="<div id='filter' style='position:fixed;'><label>Subject</label><select name='subject'><option value='undefined'>All</option>"+dispsubj(subj)+"</select><button onclick='applyfilter()'>Apply</button></div><br><br>";
             str1='';
             r=0;
             page=1;
-           $('#content').html(''); document.getElementsByClassName("active")[0].className="inactive";
-            var e=document.getElementById("VQ");
-            e.className="active";
-        
            // alert(VQstr);
-            loadmore();
+            loadmore(); 
         }
         
         function applyfilter()
@@ -248,7 +251,7 @@ $page_limit=0;
             if(page==1)
             {
                 if(parsedarray.length==0)
-                {document.getElementById("content").innerHTML =VQstr+"No Questions in this category"; return;}
+                {document.getElementById("content").innerHTML=VQstr+"No Questions in this category"; return;}
                 else{
                     VQstr+= "<table border=1 id='table_detail' align=center cellpadding=10><tr><th>Question ID</th><th>Question</th><th>Option A</th><th>Option B</th><th>Option C</th><th>Option D</th><th>Answer</th><th>Subject</th></tr>";
                 }
@@ -260,8 +263,8 @@ $page_limit=0;
                //alert(document.getElementById("content").innerHTML); 
                 
                 if(parsedarray.length == rpp){
-            nstr=nstr+"<button onclick='loadmore()'>Load More</button>";
-                }document.getElementById("content").innerHTML =VQstr+nstr;
+            nstr=nstr+"<br/><button onclick='loadmore()'>Load More</button>";
+                }document.getElementById("content").innerHTML=VQstr+nstr;
                    // alert(nstr);
                page++; //document.getElementById("content").innerHTML+= "</table>";
                 
@@ -356,7 +359,7 @@ $page_limit=0;
 			
 			
 			}
-			
+        }
 			
 //			function result(x){
 //				var score=0;
@@ -393,7 +396,7 @@ $page_limit=0;
 //
 //		
 //		}
-		}
+		
 		document.getElementById("allstudres").onclick=function(){
 			document.getElementById("content").innerHTML ="this is result page";
 			var ajx = new XMLHttpRequest();
@@ -408,67 +411,280 @@ $page_limit=0;
 
 			
 		}
-			
+    }
 		//document.getElementById("back").onclick=response();
         
-          }
+          
 		
         function Home()  {
 
         document.getElementsByClassName("active")[0].className="inactive";
             var e=document.getElementById("Home");
             e.className="active";
-			Hcon="<form><input type='button' value='add a contest'id='addcontest' ><br/><br /><input type='button' value='Remove a contest' id='remvcontest' ><br/><br /><input type='button' value='veiw all contests' id='viewcontests'</form>"
+			Hcon="<form><input type='button' value='add a contest' id='addcontest' ><br/><br /><input type='button' value='Remove a contest' id='remvcontest' ><br/><br /><input type='button' value='veiw all contests' id='viewcontests'</form>";
+            
         document.getElementById("content").innerHTML=Hcon;
-			
-			document.getElementById("addcontest").onclick=function(){
-				acon="<form><input type='text' id='name' placeholder='name of contest'><br /><input type='number' placeholder='no.of questions' id='noofque'><br /><select id='semester'><option value='1'>I</option><option value='2'>II</option><option value='3'>III</option><option value='4'>IV</option><option value='5'>V</option><option value='6'>VI</option><option value='7'>VII</option><option value='8'>VIII</option></select><br/><input type='button' id='create' value='create' onclick='Create()'></form>"
-		document.getElementById("content").innerHTML=acon;
+        }
+            ViewContests();
+        
+        document.getElementById("addcontest").onclick=function(){
+            alert();
+				acon="<form><table cellpadding=5><tr><td><label>Name of contest:</label></td><td><input type='text' style='width:250;' id='name'></td></tr><tr><td><label>Duration (in minutes):</label></td><td><input type='number' placeholder='90' style='width:50;' id='duration'></td></tr><tr><td><label>Semester</label></td><td><select id='semester'><option value='1'>I</option><option value='2'>II</option><option value='3'>III</option><option value='4'>IV</option><option value='5'>V</option><option value='6'>VI</option><option value='7'>VII</option><option value='8'>VIII</option></select></td></tr><tr><td><label>Subject:</label></td><td><select id='subject'>"+dispsubj(subj)+"</select></td></tr></table><br/><input type='button' id='create' value='Next' onclick='Create()'></form>";
+                document.getElementById("content").innerHTML=acon;
+            }
+        
+        
+        function makeTableHTML_adcon(myArray) {
+    var result='';r=0;
+            console.log(myArray);
+    for(var k=0; k<myArray.length; k++,r++) {
+        result += "<tr>";
+        for(var j=0; j<myArray[k].length; j++){
+            result += "<td>"+myArray[k][j]+"</td>";
+        }
+       // result+="<td"+subj[i][]
+       // console.log(r);
+        arrobj_adcon.push(myArray[k]);
+        result += "<td><button onclick='add_question("+(r)+")'>Add to contest</button></td></tr>";
+    }
+    return result;
+}
+        function add_question(i)
+        {
+            if(added_ques_id.includes(arrobj_adcon[i][0]))
+            { alert("that question was already selected"); }
+            else{
+            added_ques.push(arrobj_adcon[i]);
+            added_ques_id.push(arrobj_adcon[i][0]);
+            document.getElementById("view_con_ques").innerHTML="View contest questions("+added_ques.length+")";
+                alert(document.getElementById("view_con_ques").innerHTML);
+            }
+        }
+        function aq()
+        {
+            added_ques_id=[];
+            added_ques=[];
+             add_ques_to_con();
+        }
+        function back()
+        {
+            document.getElementById("content").innerHTML=store;
+        }
+        var store;
+        function vcq()
+        {
+            r=0;
+            if(added_ques.length==0)
+             {   result=''; }
+            else{
+            result=`<button onclick='back()'>Back</button><table border=1 id='table_detail' align=center cellpadding=10><tr><th>Question ID</th><th>Question</th><th>Option A</th><th>Option B</th><th>Option C</th><th>Option D</th><th>Answer</th><th>Subject</th></tr>`;
+            for(var k=0; k<added_ques.length; k++,r++) {
+        result += "<tr>";
+        for(var j=0; j<added_ques[k].length; j++){
+            result += "<td>"+added_ques[k][j]+"</td>";
+        }
+                result=result+"<td><button onclick='rem_question("+(r)+")'>Remove</button></td></tr>";
+        }
+            result+="</table></br><button onclick='create()'>Create contest</button>";  
+            }
+         document.getElementById("content").innerHTML=result;
+        }
+        
+            function view_con_ques()
+        {   store=document.getElementById("content").innerHTML;
+            vcq();
+        }
+        
+        function rem_question(i)
+        {
+            added_ques_id.splice(i,1);
+            added_ques.splice(i,1);
+            vcq();
+        }
+        
+        function add_ques_to_con()
+            {
+            arrobj_adcon=[];
+                VQstr="<div style='background-color:white;position:absolute;'><div style='float:right;width:75%;position: fixed;top:-20px'><h1>Select questions to be added</h1></div><div id='filter' style='position:fixed;top:30px;left:25%'><label>Subject</label><select name='subject'><option value='undefined'>All</option>"+dispsubj(subj)+"</select><button onclick='applyfilter_adcon()'>Apply</button></div><div style='position:fixed;top:30px;right:5%;'><button id='view_con_ques' onclick='view_con_ques()'>View contest questions("+added_ques.length+")</button></div><br><br></div>";
+            str1='';
+            r=0;
+            page=1;
+           // alert(VQstr);
+            loadmore_adcon(); 
+        }
+        
+        function applyfilter_adcon()
+        {
+         sub=document.getElementById('filter').getElementsByTagName("select")[0].value;
+            add_ques_to_con();
+           /* VQstr="<h1>Select questions to be added</h1><div id='filter' style='position:fixed;'><label>Subject</label><select name='subject'><option value='undefined'>All</option>"+dispsubj(subj)+"</select><button onclick='applyfilter_adcon()'>Apply</button></div><div style='float:right'><button id='view_con_ques' onclick='view_con_ques()'>View contest questions("+added_ques.length+")</button></div><br><br>";
+            str1='';
+            r=0;
+            page=1;
+           // alert(VQstr);
+            loadmore_adcon(); */
+            }
+        
+        
+        function loadmore_adcon() {
+            
+                var ajx = new XMLHttpRequest();
+                ajx.onreadystatechange = function () {
+                if (ajx.readyState == 4 && ajx.status == 200) {
+                    Arrobj=(ajx.responseText);
+                    load_adcon(Arrobj);
+            };
+                }
+                ajx.open("POST","LoadMore.php",true);
+        ajx.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            cred="page="+page;
+                cred+="&sub="+sub;
+            ajx.send(cred);
+            
+        
+            }
+        function load_adcon(Arrobj) {
+           // alert(Arrobj);
+           // alert(makeTableHTML(JSON.parse(Arrobj)));
+            
+            var parsedarray=JSON.parse(Arrobj);
+            var nstr;
+            if(page==1)
+            {
+                if(parsedarray.length==0)
+                {document.getElementById("content").innerHTML=VQstr+"No Questions in this category"; return;}
+                else{
+                    VQstr+= "<table border=1 id='table_detail' align=center cellpadding=10><tr><th>Question ID</th><th>Question</th><th>Option A</th><th>Option B</th><th>Option C</th><th>Option D</th><th>Answer</th><th>Subject</th></tr>";
+                }
+            }
+            
+                    str1+= makeTableHTML_adcon(parsedarray);
+                nstr=str1+"</table>";
+           // console.log(nstr);
+               //alert(document.getElementById("content").innerHTML); 
+                
+                if(parsedarray.length == rpp){
+            nstr=nstr+"<br /><button onclick='loadmore_adcon()'>Load More</button>";
+                }document.getElementById("content").innerHTML=VQstr+nstr;
+                   // alert(nstr);
+               page++; //document.getElementById("content").innerHTML+= "</table>";
+                
+            
+        }
 				
-			}
-			
-			document.getElementById("remvcontest").onclick=function(){
+	
+        document.getElementById("remvcontest").onclick=function(){
 					rcon="<form><input type='text' placeholder='contest to be removed' id='rname'><br/><input type='button' value='Remove contest' onclick='Remove()'></form>";
 					
 					document.getElementById("content").innerHTML=rcon;
 				}
 			
 			
-		document.getElementById("viewcontests").onclick=function(){
-			window.alert("hello");
-			
-            var ajx3 = new XMLHttpRequest();
-            ajx3.onreadystatechange = function () {
-                if (ajx3.readyState == 4 && ajx3.status == 200) {
-                    document.getElementById("content").innerHTML = ajx3.responseText;
-                }
-            };
-            ajx3.open("POST","viewcontests.php",true);
-        ajx3.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            ajx3.send();
+		function ViewContests(){
+			window.alert("hello srujana");
+			 $.ajax({url: "viewcontests.php", type:"post" , success: function(result){DispCon(JSON.parse(result)); }, async: true
+    });
 		}
-			
-		
-			
         
-		}
-		function Create(){
+    
+        
+        function DispCon(CA)
+        {
+            var ActiveCon=[];
+            var DefaultCon=[];
+            var CompletedCon=[];
+            var result='';
+            var str3='<br/><table border=1 id="table_detail" align=center cellpadding=10><tr><th>Contest ID</th><th>Contest Name</th><th>Subject</th><th>Duration</th><th>Semester</th><th>Status</th></tr>';
+            var max=6;
+            for(var i=0;i<CA.length;i++)
+                {
+                    if(CA[i][max-1]=='active')
+                        {
+                            ActiveCon.push(CA[i]);
+                        }
+                    if(CA[i][max-1]=='default')
+                        {
+                            DefaultCon.push(CA[i]);
+                        }
+                    if(CA[i][max-1]=='completed')
+                        {
+                            CompletedCon.push(CA[i]);
+                        }
+                }
+            if(ActiveCon.length>0)
+            {   result+=("<br /><h3>Active Contests</h3>"+str3);
+            for(var k=0; k<ActiveCon.length; k++) {
+        result += "<tr>";
+        for(var j=0; j<ActiveCon[k].length; j++){
+            result += "<td>"+ActiveCon[k][j]+"</td>";
+        }
+        result += "<td><button onclick='deactivate("+(ActiveCon[k][0])+")'>Deactivate</button></td></tr>"; }
+             result+="</table>";}
+            
+             if(CompletedCon.length>0)
+            { result+=("<br /><h3>Completed Contests</h3>"+str3);
+            for(var k=0; k<CompletedCon.length; k++) {
+        result += "<tr>";
+        for(var j=0; j<CompletedCon[k].length; j++){
+            result += "<td>"+CompletedCon[k][j]+"</td>";
+        }
+        result += "<td><button onclick='ViewResults("+(CompletedCon[k][0])+")'>View Results</button></td></tr>"; }
+             result+="</table>";}
+            
+            if(DefaultCon.length>0)
+            { result+=("<br /><h3>Contests</h3>"+str3);
+            for(var k=0; k<DefaultCon.length; k++) {
+        result += "<tr>";
+        for(var j=0; j<DefaultCon[k].length; j++){
+            result += "<td>"+DefaultCon[k][j]+"</td>";
+        }
+        result += "<td><button onclick='activate("+(DefaultCon[k][0])+")'>Activate</button></td></tr>"; }
+             result+="</table>";}
+            document.getElementById("content").innerHTML=result;
+            
+        }
+
+        function activate(conid)
+        {
+            $.ajax({url: "ActivateContest.php", type:"post" , data:{ConId:conid} , success: function(result){alert(result); }, async: true
+    });
+            ViewContests();
+            
+        }
+        
+        function deactivate(conid)
+        {
+             $.ajax({url: "DeactivateContest.php", type:"post" , data:{ConId:conid} , success: function(result){alert(result); }, async: true
+    });
+            ViewContests();
+            
+        }
+        
+        function Create()
+        {
+             name_contest=document.getElementById("name").value;
+            dur_contest=document.getElementById("duration").value;
+            sem_contest=document.getElementById("semester").value;
+             sub_contest=document.getElementById("subject").value;
+            add_ques_to_con();
+        }
+		function create(){
 			window.alert('hello');
-			var name=document.getElementById("name").value;
-					var nq=document.getElementById("noofque").value;
-					var sem=document.getElementById("semester").value;
 					var ajx = new XMLHttpRequest();
             ajx.onreadystatechange = function () {
                 if (ajx.readyState == 4 && ajx.status == 200) {
-                    document.getElementById("content").innerHTML = ajx.responseText;
+                    document.getElementById("sidenav").innerHTML =ajx.responseText;
+                    add_ques_to_con();
                 }
             };
-				creds="&name="+name+"&nq="+nq+"&sem="+sem;
+				creds="&name="+name_contest+"&dur="+dur_contest+"&sem="+sem_contest+"&sub="+sub_contest+"&ques="+JSON.stringify(added_ques_id);
             ajx.open("POST","addcontest.php",true);
         ajx.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             ajx.send(creds);
 		}
-			function Remove(){
+		
+        
+        function Remove(){
 			window.alert('hello2');
 			var rname=document.getElementById("rname").value;
 			window.alert(rname);
