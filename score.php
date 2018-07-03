@@ -6,7 +6,7 @@ include 'connection.php';
 //if($con->query($q)==true){
 //	echo "table created successfully";
 //}
-     $query="select QID,Question,Answer from testdb.questions";
+     $query="select QID,Question,Answer from testdb.q".$_SESSION['cont'];
     $sql=$con->query($query);
 $c=0;
 $j=1;
@@ -38,10 +38,23 @@ if($sql->num_rows >0){
 					$j=$j+1;
 				}
 
-	$q1="insert into testdb.result1(Rollno,a1,a2,a3,a4,a5,a6) values(".$roll.",'".$ans[1]."','".$ans[2]."','".$ans[3]."','".$ans[4]."','".$ans[5]."','".$ans[6]."')";
-					if($con->query($q1)==true){
+	$q1="insert into testdb.result".$_SESSION['cont']."(Rollno";
+	for($j=1;$j<=$_SESSION['nq'];$j++){
+		$q1 .=",a".$j;
+	}
+	$q1 .=") values(".$roll.",'";
+	
+	for($j=1;$j<$_SESSION['nq'];$j++){
+		
+		$q1 .=$ans[$j]."','";
+	}
+	$q1 .=$ans[$_SESSION['nq']]."')";
+		
+//		",'".$ans[1]."','".$ans[2]."','".$ans[3]."','".$ans[4]."','".$ans[5]."','".$ans[6]."','".$ans[7]."','".$ans[8]."','".$ans[9]."','".$ans[10]."')";
+	if($con->query($q1)==true){
 						echo " you submitted";
-					}
+					}else
+		echo $con->error;
 }
 echo $c;
 
@@ -49,6 +62,7 @@ echo $c;
 $q2="insert into testdb.result(Rollno,score) values('".$roll."',".$c.")";
 if($con->query($q2)== true){
 echo "Your score is".$c;	
-}
+}else
+	//echo $con->error;
 
 ?>	 

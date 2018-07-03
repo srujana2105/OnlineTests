@@ -8,8 +8,21 @@
     <div id="bluebar" ></div>
     <div id="profile">
     <?php 
+		include 'connection.php';
   session_start(); 
-
+		$cont=$_POST['cont'];
+		$_SESSION['cont']=$cont;
+		//$_SESSION['nq']=0;
+		$r=0;
+		echo "hello ".$_SESSION['cont']." test";
+$q="select noofque from testdb.contests where ContestName='".$_SESSION['cont']."'";
+		$n=$con->query($q) or die($con->error);
+	
+		while($r=$n->fetch_assoc()){
+			$_SESSION['nq']=$r['noofque'];
+    }
+		echo $_SESSION['nq'];
+		
   if (!isset($_SESSION['username'])) {
   	$_SESSION['msg'] = "You must log in first";
   	header('location: index.php');
@@ -37,11 +50,13 @@
     	<p> <a href="index.php?logout='1'" style="color: red;" target="_parent">logout</a> </p>
     <?php endif ?></div>
     <div id="greenbar" ></div>
-<div id="instructions" >
+<div id="instructions">
 
-    Please read the instructions carefully
+    <h1>Contest Name: <?php echo $cont; ?></h1>
+	<br>
+	Please read the instructions carefully
 
-    <span><h1>General Instructions:</h1></span>
+    <span><h2>General Instructions:</h2></span>
 
 Total duration of examination is 150 minutes.
 The clock will be set at the server. The countdown timer in the top right corner of screen will display the remaining time available for you to complete the examination. When the timer reaches zero, the examination will end by itself. You will not be required to end or submit your examination.

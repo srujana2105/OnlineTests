@@ -9,7 +9,7 @@
     <div id="profile">
     <?php 
   session_start(); 
-
+   
   if (!isset($_SESSION['username'])) {
   	$_SESSION['msg'] = "You must log in first";
   	header('location: index.php');
@@ -65,8 +65,11 @@ header('location: main2.php');
             ajx2.onreadystatechange = function () {
                 if (ajx2.readyState == 4 && ajx2.status == 200) {
 				window.alert("hello");
-			document.getElementById("Contests").innerHTML +=ajx2.responseText;
-				console.log(ajx2.responseText);
+			 var row=JSON.parse(ajx2.responseText);
+			//document.getElementById("Contests").innerHTML +='<form method="post" action="main.php" target="_blank">'
+	for(i=0;i<row.length;i++){	document.getElementById("Contests").innerHTML +='</br><form method="post" action="main.php"><button name="cont" onclick="loadcon(this.value)" value='+row[i]+'>'+row[i]+'</button></form></br>';
+	}
+					//document.getElementById("Contests").innerHTML +=</form>
 					
 //arrobj2=JSON.parse(ajx2.responseText);
                     //console.log(arrobj2);
@@ -78,6 +81,11 @@ header('location: main2.php');
             ajx2.open("POST","loadcontests.php",true);
         ajx2.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             ajx2.send();
+	}
+	function loadcon(con){
+		window.alert(con);
+		//console.log(loadcon);
+	//header('location: main.php');	
 	}
 	
 	</script>		

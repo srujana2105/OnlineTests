@@ -1,4 +1,3 @@
-
 <?php
 include 'connection.php';
 $name=$_POST['rname'];
@@ -14,4 +13,7 @@ if($con->query($q2)){
 }else{
 	echo "error2";
 }
+
+
+
 ?>
