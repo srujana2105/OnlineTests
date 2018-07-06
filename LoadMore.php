@@ -1,3 +1,4 @@
+
 <?php
 include "connection.php";
 $resultsPerPage=2;
