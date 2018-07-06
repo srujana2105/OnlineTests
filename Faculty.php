@@ -36,7 +36,7 @@ $page_limit=0;
     <li><a id="AddQuestion" class="inactive" onclick="AddQuestion()">Add question</a></li>
   <li><a id="Results"  class="inactive" onclick="Results()">View Responses and Results</a></li>
     <li><a id="VS" class="inactive" onclick="ViewSubjects()">View Subjects</a></li>
-    <li><a href="FacultyLogin.php" target="_parent">Logout</a></li>
+    <li><a href="faculty.php?logout=1">Logout</a></li>
 
     </ul>
     <div id="content">
@@ -56,7 +56,9 @@ $page_limit=0;
         var str1='';
         var VQstr;
         var r=0;
+        var r_adcon=0;
         var sub;
+        var subject;
         var rpp=2;
         var name_contest="",dur_contest="",sem_contest="",sub_contest="";
 
@@ -122,7 +124,7 @@ $page_limit=0;
                    // console.log(subj);
             getSubjects();
             console.log(subj);
-            str1="<div style='position:fixed;margin-rigth:5%;margin-left:50%;'><input id='addsub' type='text' size=30><button onclick='addSubject()'>Add subject</button></div><br><br><br><table border=1 id='table_detail' style='position:fixed;margin-rigth:50%;margin-left:5%;' align=center cellpadding=10><tr><th>Subject ID</th><th>Subject</th><th>No. of questions</th>";
+            str1="<div style='position:fixed;margin-rigth:5%;margin-left:50%;margin-top:25px;background-color:white;height:50px;overflow:auto;'><input id='addsub' type='text' size=30><button onclick='addSubject()'>Add subject</button></div><br><br><br><table border=1 id='table_detail' style='margin-rigth:50%;margin-top:-25px;margin-left:0' align=center cellpadding=10><tr><th>Subject ID</th><th>Subject</th><th>No. of questions</th>";
             for(var i=0;i<subj.length;i++)
                 {
                     str1+="<tr><td>"+subj[i][0]+"</td><td>"+subj[i][1]+"</td><td>"+subj[i][2]+"</td><td><button onclick='show_hide("+i+")'>edit</button></td><td><button onclick='removeSubject("+i+")'>remove</button></td></tr><tr id='hidden_row"+(i)+"' class='hidden_row'></tr>";
@@ -210,7 +212,7 @@ $page_limit=0;
             var e=document.getElementById("VQ");
             e.className="active";
             arrobj=[];
-            VQstr="<div id='filter' style='position:fixed;'><label>Subject</label><select name='subject'><option value='undefined'>All</option>"+dispsubj(subj)+"</select><button onclick='applyfilter()'>Apply</button></div><br><br>";
+            VQstr="<div id='filter' style='position:fixed;background-color:white;height:50px;width:80%;overflow:auto;margin-top:20px;'><div style='float:left;'><label>Subject</label><select name='subject'><option value='undefined'>All</option>"+dispsubj(subj)+"</select><button onclick='applyfilter()'>Apply</button></div></div><br><br>";
             str1='';
             r=0;
             page=1;
@@ -253,7 +255,7 @@ $page_limit=0;
                 if(parsedarray.length==0)
                 {document.getElementById("content").innerHTML=VQstr+"No Questions in this category"; return;}
                 else{
-                    VQstr+= "<table border=1 id='table_detail' align=center cellpadding=10><tr><th>Question ID</th><th>Question</th><th>Option A</th><th>Option B</th><th>Option C</th><th>Option D</th><th>Answer</th><th>Subject</th></tr>";
+                    VQstr+= "<table border=1 id='table_detail' style='margin-top:40px;float:left' align=center cellpadding=10><tr><th>Question ID</th><th>Question</th><th>Option A</th><th>Option B</th><th>Option C</th><th>Option D</th><th>Answer</th><th>Subject</th></tr>";
                 }
             }
             
@@ -263,7 +265,7 @@ $page_limit=0;
                //alert(document.getElementById("content").innerHTML); 
                 
                 if(parsedarray.length == rpp){
-            nstr=nstr+"<br/><button onclick='loadmore()'>Load More</button>";
+            nstr=nstr+"<br/><button style='margin-top:15px' onclick='loadmore()'>Load More</button>";
                 }document.getElementById("content").innerHTML=VQstr+nstr;
                    // alert(nstr);
                page++; //document.getElementById("content").innerHTML+= "</table>";
@@ -275,7 +277,7 @@ $page_limit=0;
            var x; document.getElementsByClassName("active")[0].className="inactive";
             var e=document.getElementById("AddQuestion");
             e.className="active"; 
-            str="<form id='addQuestionForm'><br><label>Question:</label><textarea rows='4' cols='50' name='Question'></textarea><br><label>Option A:</label><textarea rows='4' cols='50' name='OpA'></textarea><br><label>Option B:</label><textarea rows='4' cols='50' name='OpB'></textarea><br><label>Option C:</label><textarea rows='4' cols='50' name='OpC'></textarea><br><label>Option D:</label><textarea rows='4' cols='50' name='OpD'></textarea><br><label>Answer:</label><textarea rows='4' cols='50' name='Answer'></textarea><br><label>Subject:</label><select name='Subject'>"+dispsubj(subj)+"</select><br><br><input type='button' onclick='add()' value='Add'></form>"; document.getElementById("content").innerHTML=str;
+            str="<form id='addQuestionForm'><br><label>Question:</label><textarea rows='4' cols='100' name='Question'></textarea><br><label>Option A:</label><textarea rows='4' cols='100' name='OpA'></textarea><br><label>Option B:</label><textarea rows='4' cols='100' name='OpB'></textarea><br><label>Option C:</label><textarea rows='4' cols='100' name='OpC'></textarea><br><label>Option D:</label><textarea rows='4' cols='100' name='OpD'></textarea><br><label>Answer:</label><textarea rows='4' cols='100' name='Answer'></textarea><br><label>Subject:</label><select name='Subject'>"+dispsubj(subj)+"</select><br><br><input type='button' onclick='add()' value='Add'></form>"; document.getElementById("content").innerHTML=str;
             
         }
         
@@ -413,31 +415,44 @@ $page_limit=0;
 		}
     }
 		//document.getElementById("back").onclick=response();
-        
-          
+              
 		
         function Home()  {
-
+            getSubjects();
+            subject="undefined";
         document.getElementsByClassName("active")[0].className="inactive";
             var e=document.getElementById("Home");
             e.className="active";
-			Hcon="<form><input type='button' value='add a contest' id='addcontest' ><br/><br /><input type='button' value='Remove a contest' id='remvcontest' ><br/><br /><input type='button' value='veiw all contests' id='viewcontests'</form>";
-            
-        document.getElementById("content").innerHTML=Hcon;
-        }
+			document.getElementById("content").innerHTML="<div id='content-header' style='position:fixed;background-color:white;height:50px;width:80%;margin-top:25px;overflow:auto;'><div style='float:left;'><label>Subject</label><select name='subject'><option value='undefined'>All</option>"+dispsubj(subj)+"</select><button onclick='applyfilter_viewcon()'>Apply</button></div><div style='float:right;margin-right:220px'><button id='addcontest'>Add a contest</button></div><div  style:'float:right;'><input type='button' value='Remove a contest' id='remvcontest' onclick='removecontest()'></div></div><br><br><br/><div id='contentpane' style='margin-top:-50px;'></div>";
             ViewContests();
-        
-        document.getElementById("addcontest").onclick=function(){
+            
+            document.getElementById('addcontest').onclick=function() {
             alert();
-				acon="<form><table cellpadding=5><tr><td><label>Name of contest:</label></td><td><input type='text' style='width:250;' id='name'></td></tr><tr><td><label>Duration (in minutes):</label></td><td><input type='number' placeholder='90' style='width:50;' id='duration'></td></tr><tr><td><label>Semester</label></td><td><select id='semester'><option value='1'>I</option><option value='2'>II</option><option value='3'>III</option><option value='4'>IV</option><option value='5'>V</option><option value='6'>VI</option><option value='7'>VII</option><option value='8'>VIII</option></select></td></tr><tr><td><label>Subject:</label></td><td><select id='subject'>"+dispsubj(subj)+"</select></td></tr></table><br/><input type='button' id='create' value='Next' onclick='Create()'></form>";
+             contest_store=document.getElementById("content").innerHTML;
+				var acon="<button style='margin-top:50px' onclick='Home()'>Back</button><br/><div style='margin-rigth:30%;margin-top:80px;margin-left:20%'><form><table cellpadding=5><tr><td><label>Name of contest:</label></td><td><input type='text' style='width:250;' id='name'></td></tr><tr><td><label>Duration (in minutes):</label></td><td><input type='number' placeholder='90' style='width:50;' id='duration'></td></tr><tr><td><label>Semester</label></td><td><select id='semester'><option value='1'>I</option><option value='2'>II</option><option value='3'>III</option><option value='4'>IV</option><option value='5'>V</option><option value='6'>VI</option><option value='7'>VII</option><option value='8'>VIII</option></select></td></tr><tr><td><label>Subject:</label></td><td><select id='subject'>"+dispsubj(subj)+"</select></td></tr></table></div><br/><input type='button' id='create' value='Next' onclick='Create()'></form>";
                 document.getElementById("content").innerHTML=acon;
             }
+            
+            document.getElementById("remvcontest").onclick=function(){
+					rcon="<button onclick='Home()'>Back</button><div style='margin-top:50px'><input type='text' placeholder='contest to be removed' id='rname'></div><br/><div style='margin-top:20px'><input type='button' value='Remove contest' onclick='Remove()'></div>";
+					
+					document.getElementById("content").innerHTML=rcon;
+				}
+              }
+        
+            function applyfilter_viewcon()
+            {
+                subject=document.getElementById('content-header').getElementsByTagName("select")[0].value;
+                alert(subject);
+                ViewContests();
+            }
+            
         
         
         function makeTableHTML_adcon(myArray) {
-    var result='';r=0;
+    var result='';r_adcon
             console.log(myArray);
-    for(var k=0; k<myArray.length; k++,r++) {
+    for(var k=0; k<myArray.length; k++,r_adcon++) {
         result += "<tr>";
         for(var j=0; j<myArray[k].length; j++){
             result += "<td>"+myArray[k][j]+"</td>";
@@ -445,7 +460,7 @@ $page_limit=0;
        // result+="<td"+subj[i][]
        // console.log(r);
         arrobj_adcon.push(myArray[k]);
-        result += "<td><button onclick='add_question("+(r)+")'>Add to contest</button></td></tr>";
+        result += "<td><button onclick='add_question("+(r_adcon)+")'>Add to contest</button></td></tr>";
     }
     return result;
 }
@@ -456,7 +471,7 @@ $page_limit=0;
             else{
             added_ques.push(arrobj_adcon[i]);
             added_ques_id.push(arrobj_adcon[i][0]);
-            document.getElementById("view_con_ques").innerHTML="View contest questions("+added_ques.length+")";
+            document.getElementById("view_con_ques").innerHTML="View added Questions("+added_ques_id.length+")";
                 alert(document.getElementById("view_con_ques").innerHTML);
             }
         }
@@ -475,9 +490,9 @@ $page_limit=0;
         {
             r=0;
             if(added_ques.length==0)
-             {   result=''; }
+             {   result='<div  style="position:fixed;margin-right:70%;margin-top:30px"><button onclick="back()">Back</button></div>'; }
             else{
-            result=`<button onclick='back()'>Back</button><table border=1 id='table_detail' align=center cellpadding=10><tr><th>Question ID</th><th>Question</th><th>Option A</th><th>Option B</th><th>Option C</th><th>Option D</th><th>Answer</th><th>Subject</th></tr>`;
+            result=`<div style="position:fixed;margin-right:70%;margin-top:30px"><button onclick="back()">Back</button></div><table border=1 id='table_detail' style='margin-top:100px;float:left' align=center cellpadding=10><tr><th>Question ID</th><th>Question</th><th>Option A</th><th>Option B</th><th>Option C</th><th>Option D</th><th>Answer</th><th>Subject</th></tr>`;
             for(var k=0; k<added_ques.length; k++,r++) {
         result += "<tr>";
         for(var j=0; j<added_ques[k].length; j++){
@@ -485,7 +500,7 @@ $page_limit=0;
         }
                 result=result+"<td><button onclick='rem_question("+(r)+")'>Remove</button></td></tr>";
         }
-            result+="</table></br><button onclick='create()'>Create contest</button>";  
+            result+="</table></br><div style='float:right;width:75%;height:30px;position:fixed;background-color:white;margin-top:45%'><button style='float:right;margin-right:20px;' onclick='create()'>Create contest</button></div>";  
             }
          document.getElementById("content").innerHTML=result;
         }
@@ -505,9 +520,9 @@ $page_limit=0;
         function add_ques_to_con()
             {
             arrobj_adcon=[];
-                VQstr="<div style='background-color:white;position:absolute;'><div style='float:right;width:75%;position: fixed;top:-20px'><h1>Select questions to be added</h1></div><div id='filter' style='position:fixed;top:30px;left:25%'><label>Subject</label><select name='subject'><option value='undefined'>All</option>"+dispsubj(subj)+"</select><button onclick='applyfilter_adcon()'>Apply</button></div><div style='position:fixed;top:30px;right:5%;'><button id='view_con_ques' onclick='view_con_ques()'>View contest questions("+added_ques.length+")</button></div><br><br></div>";
+                VQstr="<div style='position:fixed;background-color:white;margin-top:10px;height:150px;width:70%;overflow:auto;'><h1>Select questions to be added</h1><br/><div id='filter' style='float:left'><label>Subject</label><select name='subject'><option value='undefined'>All</option>"+dispsubj(subj)+"</select><button onclick='applyfilter_adcon()'>Apply</button></div><div style='float:right'><button id='view_con_ques' onclick='view_con_ques()'>View contest questions("+added_ques.length+")</button></div><br><br></div>";
             str1='';
-            r=0;
+            r_adcon=0;
             page=1;
            // alert(VQstr);
             loadmore_adcon(); 
@@ -554,7 +569,7 @@ $page_limit=0;
                 if(parsedarray.length==0)
                 {document.getElementById("content").innerHTML=VQstr+"No Questions in this category"; return;}
                 else{
-                    VQstr+= "<table border=1 id='table_detail' align=center cellpadding=10><tr><th>Question ID</th><th>Question</th><th>Option A</th><th>Option B</th><th>Option C</th><th>Option D</th><th>Answer</th><th>Subject</th></tr>";
+                    VQstr+= "<table border=1 id='table_detail' style='margin-top:180px;float:left;width:90%' align=center cellpadding=10><tr><th>Question ID</th><th>Question</th><th>Option A</th><th>Option B</th><th>Option C</th><th>Option D</th><th>Answer</th><th>Subject</th></tr>";
                 }
             }
             
@@ -564,38 +579,35 @@ $page_limit=0;
                //alert(document.getElementById("content").innerHTML); 
                 
                 if(parsedarray.length == rpp){
-            nstr=nstr+"<br /><button onclick='loadmore_adcon()'>Load More</button>";
+            nstr=nstr+"<br /><button style='margin-top:10px' onclick='loadmore_adcon()'>Load More</button>";
                 }document.getElementById("content").innerHTML=VQstr+nstr;
                    // alert(nstr);
                page++; //document.getElementById("content").innerHTML+= "</table>";
                 
             
         }
-				
-	
-        document.getElementById("remvcontest").onclick=function(){
-					rcon="<form><input type='text' placeholder='contest to be removed' id='rname'><br/><input type='button' value='Remove contest' onclick='Remove()'></form>";
-					
-					document.getElementById("content").innerHTML=rcon;
-				}
 			
 			
 		function ViewContests(){
 			window.alert("hello srujana");
-			 $.ajax({url: "viewcontests.php", type:"post" , success: function(result){DispCon(JSON.parse(result)); }, async: true
+			 $.ajax({url: "viewcontests.php", type:"post" ,data:{sub:subject}, success: function(result)
+                     {
+                         DispCon(JSON.parse(result));
+                        console.log(result);
+                     }
+                     , async: true
     });
 		}
         
-    
-        
         function DispCon(CA)
         {
+            alert(CA);
+            var contest_result='';
             var ActiveCon=[];
             var DefaultCon=[];
             var CompletedCon=[];
-            var result='';
-            var str3='<br/><table border=1 id="table_detail" align=center cellpadding=10><tr><th>Contest ID</th><th>Contest Name</th><th>Subject</th><th>Duration</th><th>Semester</th><th>Status</th></tr>';
-            var max=6;
+            var str3='<table border=1 id="table_detail" align=center style="width:80%;float:left;margin-right:50%;" cellpadding=10><tr><th>Contest ID</th><th>Contest Name</th><th>Subject</th><th>Duration</th><th>Semester</th><th>Status</th></tr>';
+            var max=7;
             for(var i=0;i<CA.length;i++)
                 {
                     if(CA[i][max-1]=='active')
@@ -612,36 +624,38 @@ $page_limit=0;
                         }
                 }
             if(ActiveCon.length>0)
-            {   result+=("<br /><h3>Active Contests</h3>"+str3);
+            {   contest_result+=("<br /><h3 style='float:left'>Active Contests</h3>"+str3);
             for(var k=0; k<ActiveCon.length; k++) {
-        result += "<tr>";
+        contest_result += "<tr>";
         for(var j=0; j<ActiveCon[k].length; j++){
-            result += "<td>"+ActiveCon[k][j]+"</td>";
+            contest_result += "<td>"+ActiveCon[k][j]+"</td>";
         }
-        result += "<td><button onclick='deactivate("+(ActiveCon[k][0])+")'>Deactivate</button></td></tr>"; }
-             result+="</table>";}
+        contest_result += "<td><button onclick='deactivate("+(ActiveCon[k][0])+")'>Deactivate</button></td></tr>"; }
+             contest_result+="</table>";}
+            
             
              if(CompletedCon.length>0)
-            { result+=("<br /><h3>Completed Contests</h3>"+str3);
+            { contest_result+=("<br /><h3 style='float:left'>Completed Contests</h3>"+str3);
             for(var k=0; k<CompletedCon.length; k++) {
-        result += "<tr>";
+        contest_result += "<tr>";
         for(var j=0; j<CompletedCon[k].length; j++){
-            result += "<td>"+CompletedCon[k][j]+"</td>";
+            contest_result += "<td>"+CompletedCon[k][j]+"</td>";
         }
-        result += "<td><button onclick='ViewResults("+(CompletedCon[k][0])+")'>View Results</button></td></tr>"; }
-             result+="</table>";}
+        contest_result += "<td><button onclick='ViewResults("+(CompletedCon[k][0])+")'>View Results</button></td></tr>"; }
+             contest_result+="</table>";}
             
             if(DefaultCon.length>0)
-            { result+=("<br /><h3>Contests</h3>"+str3);
+            { contest_result+=("<br /><h3 style='float:left'>Contests</h3>"+str3);
             for(var k=0; k<DefaultCon.length; k++) {
-        result += "<tr>";
+        contest_result += "<tr>";
         for(var j=0; j<DefaultCon[k].length; j++){
-            result += "<td>"+DefaultCon[k][j]+"</td>";
+            contest_result += "<td>"+DefaultCon[k][j]+"</td>";
         }
-        result += "<td><button onclick='activate("+(DefaultCon[k][0])+")'>Activate</button></td></tr>"; }
-             result+="</table>";}
-            document.getElementById("content").innerHTML=result;
+        contest_result += "<td><button onclick='activate("+(DefaultCon[k][0])+")'>Activate</button></td></tr>"; }
+             contest_result+="</table>";}
             
+            document.getElementById("contentpane").innerHTML=contest_result;
+            alert(contest_result);
         }
 
         function activate(conid)

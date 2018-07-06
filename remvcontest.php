@@ -1,8 +1,9 @@
+
 <?php
 include 'connection.php';
 $name=$_POST['rname'];
 $q2="DROP TABLE testdb.result$name";
-$q1="DELETE FROM testdb.contests WHERE ContestName='$name'";
+$q1="DELETE FROM contests WHERE ContestName='$name'";
 if($con->query($q1)){
 	echo "contest removed successfully";
 }else{
@@ -13,7 +14,4 @@ if($con->query($q2)){
 }else{
 	echo "error2";
 }
-
-
-
 ?>
