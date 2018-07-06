@@ -5,6 +5,7 @@
 	<title>Test screen</title>
 	<link rel="stylesheet" type="text/css" href="main.css">
 	<style>
+/*
 		#ques{
 			float: right;
 			background-color: aliceblue;
@@ -16,6 +17,7 @@
 			margin-right: 50px;
 			
 		}
+*/
 		.btns{
 			//width:20px;
 			color:black;
@@ -24,6 +26,27 @@
 			padding-right: 10px;
 			//margin-left: 10px;
 			margin: 5px;
+		}
+		#hms{
+			float:right;
+			font-size: 20px;
+			width:auto;
+			background-color:aliceblue;
+			border-radius: 5px;
+		}
+		.view{
+			background-color:aliceblue;
+			width: 230px;
+			height: auto;
+			padding: 10px;
+			margin-top: 70px;
+			margin-right: 50px;
+			float: right;
+		}
+		#cont{
+			font-family: bold;
+			font-size: 30px;
+			color: aliceblue;
 		}
 	
 	</style>
@@ -67,12 +90,20 @@
 <?php  if (isset($_SESSION['username'])) : ?>
     	<p>Welcome <strong><?php echo $_SESSION['username']; ?><br>Roll No.:</strong><?php echo $_SESSION['rollno']; ?></p>
     <?php endif ?></div>
-    <div id="greenbar" ></div>
+    <div id="greenbar" >
+		<div><span id="cont"><?php echo $_SESSION['cont']; ?></span>
+		<span ><button id=hms><?php echo $_SESSION['dn'];?>:00</button></span></div>
+	</div>
     <div id="instructions">hi Hello </div>
-	<div id="result">Result: </div>
-	<div id="score">your Score is </div>
 	
-	<div align="right" id="ques">You can view your questions here<br></div>
+	<div align="right" class="view" id="ques">You can view your questions here<br></div>
+	<div align="right" class="view"><div>
+		notvisited:<span id="nv"></span>
+		</div>
+	<div >Visited:<span id="vi"></span></div>
+	<div >Not Answered:<span id="na"></span></div>
+		<div >Answered:</div><span id="a"></span>
+	<div >Mark for review:</div><span id="mr"></span></div>
             
     <div><div id="prev" style="position: fixed; bottom: 50px;" ><button name="previous">Previous</button>
         </div>
@@ -88,9 +119,36 @@
 	?>
 -->
 	<script>
+		console.log("welcome");
+		alert("welcome");
+		var d=<?php echo $_SESSION['dn']; ?>;
+onload=countdown(d);
 		
-		
-		
+		var timeoutHandle;
+function countdown(minutes) {
+    var seconds = 60;
+    var mins = minutes
+    function tick() {
+        var counter = document.getElementById("hms");
+        var current_minutes = mins-1
+        seconds--;
+        counter.innerHTML = current_minutes.toString() + ":" + (seconds < 10 ? "0" : "") + String(seconds);
+        if( seconds > 0 ) {
+            timeoutHandle=setTimeout(tick, 1000);
+        } else {
+
+            if(mins > 1){
+               setTimeout(function () { countdown(mins - 1); }, 1000);
+
+            }else{
+				alert("test completed");
+				submit2();
+			}
+        }
+    }
+    tick();
+}
+
 		var p=<?php echo $_SESSION['nq']; ?>;
 		//console.log(p);
 		var n=Number(p);
@@ -99,10 +157,14 @@
 		var ans=[];
 		var view=[];
 		var mark=[];
-		for(i=1;i<=n;i++)
-		ans[i]=" ";
+		for(i=1;i<=n;i++){
+			view[i]=0;
+			ans[i]=" ";
+		}
+		
 		var str=" ";
 		var row;
+		
 		for(var t=1;t<=p;t++){
 			str +='<button id="btn'+t+'" class="btns" onclick="ques('+t+')">'+t+'</button>';
 				
@@ -131,18 +193,18 @@ document.getElementById("ques").innerHTML +=str;
               return array;
             }
         pool=shuffle(pool);
-        document.getElementById('profile').innerHTML=pool;
+      //  document.getElementById('profile').innerHTML=pool;
     console.log(pool);
 		 var ajx4 = new XMLHttpRequest();
 			  
             ajx4.onreadystatechange = function () {
                 if (ajx4.readyState == 4 && ajx4.status == 200) {
 					//window.alert("storing");
-					console.log("haii1");
-					document.getElementById("profile").innerHTML=ajx4.responseText;
+					//console.log("haii1");
+					//document.getElementById("profile").innerHTML=ajx4.responseText;
 
 					//window.alert("success");
-                    console.log("haii2");
+                 //   console.log("haii2");
 				}
 			};
 			   var p="&pool="+pool;
@@ -160,6 +222,11 @@ document.getElementById("ques").innerHTML +=str;
 		var cor=[];
 		//cor[]=0;
 		var x=0;
+		var mr=0;
+		var vi=0;
+		var nv=n;
+		var na=0;
+		var a=0;
 		  function disp(row){ 
 	display(0,row);	
 	document.getElementById("next").onclick = function(){
@@ -180,15 +247,7 @@ document.getElementById("ques").innerHTML +=str;
         }                                                    
         }
 		
-//			document.getElementById("mark").onclick = function(){
-//				window.alert("mark clicked");
-//				if(attempt[x+1]==1){
-//					window.alert("attempted");
-//					document.getElementById("btn"+pool[x+1]).style.backgroundColor="blue";
-//				}
-//				
-//			}
-			
+
 }
 		function ques(t){
 			//x=t-1;
@@ -197,53 +256,63 @@ document.getElementById("ques").innerHTML +=str;
 		}
 		
 		function display(x1,row){
-			console.log("disp");
 			
 			var y=pool[x1]+1;
 			//var view[]=0;
 			var qno=x1+1;
 			//view[y]=1;
 			ans[y]=" ";
-//			if(attempt[y]==1){
-//document.getElementById("op"+cor[y]).checked="checked";
-////document.getElementById("btn"+y).style.backgroundColor="green";
-//			}else{
-//				if(view[y]==1){
-//					document.getElementById("btn"+qno).style.backgroundColor="red";
-//				}
-//			}
-
-			var question= '<div class="options">'+qno+'.'+row[y]["Question"]+'.</div><hr><br>  <form><div class="options"> <input type="radio" name="answer" id="op1" value="'+row[y]["OpA"]+'"  onchange="func(this.value,'+y+','+qno+')" >a.'+row[y]["OpA"]+'</div>   <br><br><div class="options"><input type="radio" name="answer" id="op2" value="'+row[y]["OpB"]+'" onchange="func(this.value,'+y+','+qno+')" >b.'+row[y]["OpB"]+'.</div><br><br><div class="options"><input type="radio" name="answer" id="op3" value="'+row[y]["OpC"]+'" onchange="func(this.value,'+y+','+qno+')" >c.'+row[y]["OpC"]+'.</div><br><br><div class="options"><input type="radio" name="answer" id="op4" value="'+row[y]["OpD"]+'" onchange="func(this.value,'+y+','+qno+')" >d.'+row[y]["OpD"]+'.</div></form>';
+			var question= '<div class="options">'+qno+'.'+row[y]["Question"]+'.</div><hr><br>  <form><div class="options"> <input type="checkbox" name="answer" id="op1" value="'+row[y]["OpA"]+'"  onchange="func(this.value,'+y+','+qno+')" >a.'+row[y]["OpA"]+'</div>   <br><br><div class="options"><input type="checkbox" name="answer" id="op2" value="'+row[y]["OpB"]+'" onchange="func(this.value,'+y+','+qno+')" >b.'+row[y]["OpB"]+'.</div><br><br><div class="options"><input type="checkbox" name="answer" id="op3" value="'+row[y]["OpC"]+'" onchange="func(this.value,'+y+','+qno+')" >c.'+row[y]["OpC"]+'.</div><br><br><div class="options"><input type="checkbox" name="answer" id="op4" value="'+row[y]["OpD"]+'" onchange="func(this.value,'+y+','+qno+')" >d.'+row[y]["OpD"]+'.</div></form>';
 
 					document.getElementById('instructions').innerHTML=question;
+
+			if(view[y]==0){
+				vi=vi+1;
+				document.getElementById("vi").innerHTML = vi;
+
+				nv=nv-1;
+				document.getElementById("nv").innerHTML = nv;
+			}else{
+				
+			}
 			view[y]=1;
 			if(attempt[y]==1){
 document.getElementById("op"+cor[y]).checked="checked";
-//document.getElementById("btn"+y).style.backgroundColor="green";
+
 			}else{
 				if(view[y]==1){
 					document.getElementById("btn"+qno).style.backgroundColor="red";
+                  
 				}
 			}
 			
 		document.getElementById("mark").onclick = function(){
-				window.alert("mark clicked");
 				if(attempt[y]==1){
 					if(mark[y]==1){
+						
 						window.alert("already marked");
 						mark[y]=0;
+                   mr=mr-1;			
+						document.getElementById("mr").innerHTML = mr;
 				document.getElementById("btn"+qno).style.backgroundColor="green";
 			}else{ 
 					window.alert("attempted");
 					document.getElementById("btn"+qno).style.backgroundColor="blue";
+			mr=mr+1;
+				document.getElementById("mr").innerHTML = mr;
 					mark[y]=1;
+			         
+				window.alert("no. of marked");
 			}
 				}
 			
 				
 			}
-	
-			
+		document.getElementById("vi").innerHTML = vi;
+			document.getElementById("nv").innerHTML = nv;
+			document.getElementById("mr").innerHTML = mr;
+			document.getElementById("na").innerHTML = vi-a-1;
+          document.getElementById("a").innerHTML = a;
 
 		}
 
@@ -251,13 +320,20 @@ document.getElementById("op"+cor[y]).checked="checked";
 			function func(x2,i,q)
 		
     { 
-		//document.getElementById("btn"+).style.backgroundColor="green";
-		//var x=pool[i]+1;
-//		if(ans[i]==x2){
-//			window.alert("second click");
-//			document.getElementById("op"+cor[i]).checked="unchecked";
-//		}
-		document.getElementById("btn"+q).style.backgroundColor="green";
+		window.alert(ans[i]);
+		if(ans[i] == x2){
+			ans[i]=' ';
+			console.log(ans[i]);
+			//window.alert("second click");
+			document.getElementById("op"+cor[i]).checked=false;
+			a=a-1;
+			document.getElementById("a").innerHTML = a;
+		}
+		else{
+			window.alert("clicked");
+			document.getElementById("btn"+q).style.backgroundColor="green";
+			a=a+1;
+			document.getElementById("a").innerHTML = a;
 		attempt[i]=0;
 		mark[i]=0;
 		var t=1;
@@ -273,49 +349,66 @@ document.getElementById("op"+cor[y]).checked="checked";
 				   }
 			   
 		   }
+			for(t=1;t<=4;t++){
+				if(cor[i]==t){
+					document.getElementById("op"+t).checked=true;
+				}else
+					document.getElementById("op"+t).checked=false;
+			}
 		
 		ans[i]=x2;
 		if(attempt[i]==0){
-		document.getElementById("btn"+q).style.backgroundColor="red";	
+		document.getElementById("btn"+q).style.backgroundColor="red";
+//			na=na+1;
+//			document.getElementById("na").innerHTML = na;
 		}
-		document.getElementById("mark").onclick = function(){
-				window.alert("mark clicked");
-				if(attempt[i]==1){
-					if(mark[i]==1){
-						window.alert("already marked");
-						mark[i]=0;
-				document.getElementById("btn"+q).style.backgroundColor="green";
-			}else{ 
-					window.alert("attempted");
-					document.getElementById("btn"+q).style.backgroundColor="blue";
-					mark[i]=1;
-			}
-				}
-			
-				
-			}
+//		document.getElementById("mark").onclick = function(){
+//				window.alert("mark clicked");
+//				if(attempt[i]==1){
+//					if(mark[i]==1){
+//						window.alert("already marked");
+//						mark[i]=0;
+//						mr=mr-1;
+//				document.getElementById("btn"+q).style.backgroundColor="green";
+//			}else{ 
+//					window.alert("attempted");
+//					document.getElementById("btn"+q).style.backgroundColor="blue";
+//					mark[i]=1;
+//				mr=mr+1;
+//			}
+//				}
+//			
+//				
+//			}	
+		}
 
-		
     }
-				
+		
+			
 	document.getElementById("submit").onclick= function()
 	{
-		window.alert("submit");
 		
-		var ajx2 = new XMLHttpRequest();
-			  
-            ajx2.onreadystatechange = function () {
-                if (ajx2.readyState == 4 && ajx2.status == 200) {
-					alert(ans);
-document.getElementById("score").innerHTML=ajx2.responseText;
-					//window.alert("success");
-                    //console.log("haii2");
-				}
-			};
-			   var credss = "&ans="+ans;
-            ajx2.open("POST","score.php",true);
-        ajx2.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            ajx2.send(credss);
+		var r=confirm("are you sure you want to submit");
+	if(r){
+//			  var ajx2=new XMLHttpRequest();
+//            ajx2.onreadystatechange = function () {
+//                if (ajx2.readyState == 4 && ajx2.status == 200) {
+//					alert(ans);
+//		
+//						var myWindow = window.open(" ","_self");
+//					alert(myWindow);
+//myWindow.document.write(ajx2.responseText);
+//						
+//						//window.location="main.php";
+//				}
+//					
+//			};
+//			   var credss = "&ans="+ans;
+//            ajx2.open("POST","score.php",true);
+//        ajx2.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+//            ajx2.send(credss);
+}
+		submit2();
 	}
 	var sql = "SELECT * FROM testdb.q<?php echo $_SESSION['cont'] ?>";
         
@@ -323,10 +416,8 @@ document.getElementById("score").innerHTML=ajx2.responseText;
 			  
             ajx.onreadystatechange = function () {
                 if (ajx.readyState == 4 && ajx.status == 200) {
-					console.log("hello");
-					console.log(ajx.responseText);
+					
 					row=JSON.parse(ajx.responseText);
-				console.log(row[1]["Question"]);
 					document.getElementById("instructions").innerHTML=ajx.responseText;
 					disp(row);
 				}
@@ -336,7 +427,26 @@ document.getElementById("score").innerHTML=ajx2.responseText;
         ajx.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             ajx.send(creds);
 		
+	function submit2(){
+		  var ajx2=new XMLHttpRequest();
+            ajx2.onreadystatechange = function () {
+                if (ajx2.readyState == 4 && ajx2.status == 200) {
+					
+		
+						var myWindow = window.open(" ","_self");
+					
+myWindow.document.write(ajx2.responseText);
+						
+		
+				}
+					
+			};
+			   var credss = "&ans="+ans;
+            ajx2.open("POST","score.php",true);
+        ajx2.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            ajx2.send(credss);
 	
+	}
 		
 	</script>
 	</body>

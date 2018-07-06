@@ -3,6 +3,21 @@
 <head>
 	<title>Home</title>
 	<link rel="stylesheet" type="text/css" href="main.css">
+	<style>
+	#hms{
+			float:right;
+			font-size: 20px;
+			width:auto;
+			background-color:aliceblue;
+			border-radius: 5px;
+		}
+		#cont{
+			font-family: bold;
+			font-size: 30px;
+			color: aliceblue;
+		}
+	
+	</style>
 </head>
 <body>
     <div id="bluebar" ></div>
@@ -10,18 +25,20 @@
     <?php 
 		include 'connection.php';
   session_start(); 
-		$cont=$_POST['cont'];
-		$_SESSION['cont']=$cont;
+//		$cont=$_POST['cont'];
+//		$_SESSION['cont']=$cont;
 		//$_SESSION['nq']=0;
 		$r=0;
 		echo "hello ".$_SESSION['cont']." test";
-$q="select noofque from testdb.contests where ContestName='".$_SESSION['cont']."'";
+$q="select NoofQuestions,duration from testdb.contests where ContestName='".$_SESSION['cont']."'";
 		$n=$con->query($q) or die($con->error);
 	
 		while($r=$n->fetch_assoc()){
-			$_SESSION['nq']=$r['noofque'];
+			$_SESSION['nq']=$r['NoofQuestions'];
+			$_SESSION['dn']=$r['duration'];
     }
 		echo $_SESSION['nq'];
+		echo $_SESSION['dn'];
 		
   if (!isset($_SESSION['username'])) {
   	$_SESSION['msg'] = "You must log in first";
@@ -46,13 +63,17 @@ $q="select noofque from testdb.contests where ContestName='".$_SESSION['cont']."
 
     <!-- logged in user information -->
     <?php  if (isset($_SESSION['username'])) : ?>
-    	<p>Welcome <strong><?php echo $_SESSION['username']; ?><br>Roll No.:</strong><?php echo $_SESSION['rollno']; ?></p>
+    	<p>Welcome <strong><?php echo $_SESSION['username']; ?><br>Roll No.:</strong><?php echo $_SESSION['rollno']; ?><br>Semester:<?php echo $_SESSION['semester']; ?></p>
     	<p> <a href="index.php?logout='1'" style="color: red;" target="_parent">logout</a> </p>
     <?php endif ?></div>
-    <div id="greenbar" ></div>
+    <div id="greenbar" >
+	<div><div><span id="cont"><?php echo $_SESSION['cont']; ?></span>
+		<span ><button id=hms><?php echo $_SESSION['dn'];?>:00</button></span></div></div>
+		
+	</div>
 <div id="instructions">
 
-    <h1>Contest Name: <?php echo $cont; ?></h1>
+    <h1>Contest Name: <?php echo $_SESSION['cont']; ?></h1>
 	<br>
 	Please read the instructions carefully
 
